@@ -1,21 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:eoscalculator/constants/constant.dart';
+import 'package:eoscalculator/pages/eospage.dart';
+import 'package:eoscalculator/providers/AppStateProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'userDetails.dart';
+import 'package:provider/provider.dart';
+import 'models/compound.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => new _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<UserDetails> _searchResult = [];
-  List<UserDetails> _userDetails = [];
+  List<Compound> _searchResult = [];
+  List<Compound> _compoundList = [];
   final customCp = 0;
-  TextEditingController controller = new TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {
@@ -24,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       for (Map user in responseJson) {
-        _userDetails.add(UserDetails.fromJson(user));
+        _compoundList.add(Compound.fromJson(user));
       }
     });
   }
@@ -37,54 +41,70 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildUsersList() {
+    final provider = Provider.of<AppStateProvider>(context);
 
-    return new ListView.builder(
-
-      itemCount: _userDetails.length,
+    return ListView.builder(
+      itemCount: _compoundList.length,
       itemBuilder: (context, index) {
-        return new Card(
+        return Card(
           child: ListTile(
             leading: FlutterLogo(size: 56.0),
-            title: Text(_userDetails[index].Name),
-            subtitle: Text(_userDetails[index].Formula),
-
-
-          onTap: (){
-            AlertDialog alert = AlertDialog(
-
-              title: Text('' + _userDetails[index].Name.toUpperCase()),
-              content: Text('Formül: ' + _userDetails[index].Formula + '\nTfp: ' + _userDetails[index].Tfp.toString() +'\nTb: ' + _userDetails[index].Tb.toString() +'\nTc: ' + _userDetails[index].Tc.toString() +'\nPc: ' + _userDetails[index].Pc.toString() +'\nVc: ' + _userDetails[index].Vc.toString() +'\nZc: ' + _userDetails[index].Zc.toString() +'\nΩ: ' + _userDetails[index].Omega.toString() +'\nDipm: ' + _userDetails[index].Dipm.toString() +'\nCpA: ' + _userDetails[index].CpA.toString()+'\nCpB: ' + _userDetails[index].CpB.toString() +'\nCpC: ' + _userDetails[index].CpC.toString() +'\nCpD: ' + _userDetails[index].CpD.toString() +'\ndHf: ' + _userDetails[index].dHf.toString() +'\ndGf: ' + _userDetails[index].dGf.toString() +'\nEq: ' + _userDetails[index].Eq.toString() +'\nLden: ' + _userDetails[index].Lden.toString() +'\nTden: ' + _userDetails[index].Tden.toString()),
-              actions: [
-              ],
-            );
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return alert;
-              },
-            );
-          },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSearchResults() {
-    return new ListView.builder(
-      itemCount: _searchResult.length,
-      itemBuilder: (context, i) {
-        return new Card(
-          child: new ListTile(
-            leading: FlutterLogo(size: 56.0),
-
-            title: new Text(
-                _searchResult[i].Name),
-            subtitle: Text(_searchResult[i].Formula),
-            onTap: (){
+            title: Text(_compoundList[index].name),
+            subtitle: Text(_compoundList[index].formula),
+            onTap: () {
               AlertDialog alert = AlertDialog(
-                title: Text(_searchResult[i].Name.toUpperCase()),
-                content: Text('Formül: ' + _searchResult[i].Formula + '\nTfp: ' + _searchResult[i].Tfp.toString() +'\nTb: ' + _searchResult[i].Tb.toString() +'\nTc: ' + _searchResult[i].Tc.toString() +'\nPc: ' + _searchResult[i].Pc.toString() +'\nVc: ' + _searchResult[i].Vc.toString() +'\nZc: ' + _searchResult[i].Zc.toString() +'\nOmega: ' + _searchResult[i].Omega.toString() +'\nDipm: ' + _searchResult[i].Dipm.toString() +'\nCpA: ' + _searchResult[i].CpA.toString()+'\nCpB: ' + _searchResult[i].CpB.toString() +'\nCpC: ' + _searchResult[i].CpC.toString() +'\nCpD: ' + _searchResult[i].CpD.toString() +'\ndHf: ' + _searchResult[i].dHf.toString() +'\ndGf: ' + _searchResult[i].dGf.toString() +'\nEq: ' + _searchResult[i].Eq.toString()+'\nLden: ' + _searchResult[i].Lden.toString() +'\nTden: ' + _searchResult[i].Tden.toString()),actions: [
+                title: Text('' + _compoundList[index].name.toUpperCase()),
+                content: Text('Formül: ' +
+                    _compoundList[index].formula +
+                    '\nTfp: ' +
+                    _compoundList[index].tfp.toString() +
+                    '\nTb: ' +
+                    _compoundList[index].tb.toString() +
+                    '\nTc: ' +
+                    _compoundList[index].tc.toString() +
+                    '\nPc: ' +
+                    _compoundList[index].pc.toString() +
+                    '\nVc: ' +
+                    _compoundList[index].vc.toString() +
+                    '\nZc: ' +
+                    _compoundList[index].zc.toString() +
+                    '\nΩ: ' +
+                    _compoundList[index].omega.toString() +
+                    '\nDipm: ' +
+                    _compoundList[index].dipm.toString() +
+                    '\nCpA: ' +
+                    _compoundList[index].cpA.toString() +
+                    '\nCpB: ' +
+                    _compoundList[index].cpB.toString() +
+                    '\nCpC: ' +
+                    _compoundList[index].cpC.toString() +
+                    '\nCpD: ' +
+                    _compoundList[index].cpD.toString() +
+                    '\ndHf: ' +
+                    _compoundList[index].dHf.toString() +
+                    '\ndGf: ' +
+                    _compoundList[index].dGf.toString() +
+                    '\nEq: ' +
+                    _compoundList[index].eq.toString() +
+                    '\nLden: ' +
+                    _compoundList[index].lden.toString() +
+                    '\nTden: ' +
+                    _compoundList[index].tden.toString()),
+                actions: [
+                  FlatButton(
+                    child: Text("Hesapla"),
+                    onPressed: () {
+                      //Page Navigator
+                      print("object");
+
+                      provider.changeCurrentCompound(_compoundList[index]);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EOSPage()),
+                      );
+                    },
+                  ),
                 ],
               );
               showDialog(
@@ -94,28 +114,89 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             },
-
           ),
+        );
+      },
+    );
+  }
 
+  Widget _buildSearchResults() {
+    return ListView.builder(
+      itemCount: _searchResult.length,
+      itemBuilder: (context, i) {
+        return Card(
+          child: ListTile(
+            leading: FlutterLogo(size: 56.0),
+            title: Text(_searchResult[i].name),
+            subtitle: Text(_searchResult[i].formula),
+            onTap: () {
+              AlertDialog alert = AlertDialog(
+                title: Text(_searchResult[i].name.toUpperCase()),
+                content: Text('Formül: ' +
+                    _searchResult[i].formula +
+                    '\nTfp: ' +
+                    _searchResult[i].tfp.toString() +
+                    '\nTb: ' +
+                    _searchResult[i].tb.toString() +
+                    '\nTc: ' +
+                    _searchResult[i].tc.toString() +
+                    '\nPc: ' +
+                    _searchResult[i].pc.toString() +
+                    '\nVc: ' +
+                    _searchResult[i].vc.toString() +
+                    '\nZc: ' +
+                    _searchResult[i].zc.toString() +
+                    '\nOmega: ' +
+                    _searchResult[i].omega.toString() +
+                    '\nDipm: ' +
+                    _searchResult[i].dipm.toString() +
+                    '\nCpA: ' +
+                    _searchResult[i].cpA.toString() +
+                    '\nCpB: ' +
+                    _searchResult[i].cpB.toString() +
+                    '\nCpC: ' +
+                    _searchResult[i].cpC.toString() +
+                    '\nCpD: ' +
+                    _searchResult[i].cpD.toString() +
+                    '\ndHf: ' +
+                    _searchResult[i].dHf.toString() +
+                    '\ndGf: ' +
+                    _searchResult[i].dGf.toString() +
+                    '\nEq: ' +
+                    _searchResult[i].eq.toString() +
+                    '\nLden: ' +
+                    _searchResult[i].lden.toString() +
+                    '\nTden: ' +
+                    _searchResult[i].tden.toString()),
+                actions: [],
+              );
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
+            },
+          ),
         );
       },
     );
   }
 
   Widget _buildSearchBox() {
-    return new Padding(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: new Card(
-        child: new ListTile(
-          leading: new Icon(Icons.search),
-          title: new TextField(
+      child: Card(
+        child: ListTile(
+          leading: Icon(Icons.search),
+          title: TextField(
             controller: controller,
-            decoration: new InputDecoration(
-                hintText: 'Ara', border: InputBorder.none),
+            decoration:
+                InputDecoration(hintText: 'Ara', border: InputBorder.none),
             onChanged: onSearchTextChanged,
           ),
-          trailing: new IconButton(
-            icon: new Icon(Icons.cancel),
+          trailing: IconButton(
+            icon: Icon(Icons.cancel),
             onPressed: () {
               controller.clear();
               onSearchTextChanged('');
@@ -127,11 +208,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
-    return new Column(
+    return Column(
       children: <Widget>[
-        new Container(
+        Container(
             color: Theme.of(context).primaryColor, child: _buildSearchBox()),
-        new Expanded(
+        Expanded(
             child: _searchResult.length != 0 || controller.text.isNotEmpty
                 ? _buildSearchResults()
                 : _buildUsersList()),
@@ -141,9 +222,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Equation Of State'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Equation Of State'),
         elevation: 0.0,
       ),
       body: _buildBody(),
@@ -158,9 +239,10 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    _userDetails.forEach((userDetail) {
-      if (userDetail.Name.toLowerCase().contains(text.toLowerCase()) ||
-          userDetail.Formula.toLowerCase().contains(text.toLowerCase())) _searchResult.add(userDetail);
+    _compoundList.forEach((userDetail) {
+      if (userDetail.name.toLowerCase().contains(text.toLowerCase()) ||
+          userDetail.formula.toLowerCase().contains(text.toLowerCase()))
+        _searchResult.add(userDetail);
     });
 
     setState(() {});
