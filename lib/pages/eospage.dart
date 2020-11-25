@@ -46,13 +46,10 @@ class EOSPageState extends State<EOSPage> {
     final multiplyFieldController2 = TextEditingController();
 
     count() async {
-      setState(() {});
-
       ByteData data = await rootBundle.load("assets/preos.xlsx");
       var bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       var excel = Excel.decodeBytes(bytes);
-      Sheet sheetObject = excel['PVT'];
 
       excel.updateCell('PVT', CellIndex.indexByString("B4"),
           provider.currentCompound.tc.toString());
