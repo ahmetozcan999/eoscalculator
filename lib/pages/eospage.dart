@@ -34,6 +34,8 @@ class EOSPageState extends State<EOSPage> {
   var multiplyResult;
   var fugasite;
   var fugasitesonuc;
+  final multiplyFieldController = TextEditingController();
+  final multiplyFieldController2 = TextEditingController();
 
   var sfaktoru;
 
@@ -42,40 +44,11 @@ class EOSPageState extends State<EOSPage> {
     // Build a Form widget using the _formKey created above.
 
     final provider = Provider.of<AppStateProvider>(context);
-    final multiplyFieldController = TextEditingController();
-    final multiplyFieldController2 = TextEditingController();
 
     count() async {
-      ByteData data = await rootBundle.load("assets/preos.xlsx");
-      var bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      var excel = Excel.decodeBytes(bytes);
+      await writeToExcel(provider);
 
-      excel.updateCell('PVT', CellIndex.indexByString("B4"),
-          provider.currentCompound.tc.toString());
-      excel.updateCell('PVT', CellIndex.indexByString("C4"),
-          provider.currentCompound.pc.toString());
-      excel.updateCell(
-          'PVT', CellIndex.indexByString("B7"), multiplyFieldController.text);
-      excel.updateCell(
-          'PVT', CellIndex.indexByString("B8"), multiplyFieldController2.text);
-      print(multiplyFieldController2.text);
-
-      //print(getApplicationDocumentsDirectory().toString());
-      excel.encode();
-
-      var sheet = excel['PVT'];
-      print("burdayım");
-
-      var denemeokuma = sheet.cell(CellIndex.indexByString("B4"));
-      print(denemeokuma.value.toString());
-      var denemeokuma2 = sheet.cell(CellIndex.indexByString("C10"));
-      multiplyResult = denemeokuma2.value.value;
-      fugasitesonuc = sheet.cell(CellIndex.indexByString("C10"));
-      fugasite = fugasitesonuc.value.value;
-      print("mresult" + multiplyResult);
-      sfaktoru = sheet.cell(CellIndex.indexByString("C10"));
-      print("fugasite " + fugasite);
+      await readFromExcel();
     }
 
     return Scaffold(
@@ -173,5 +146,48 @@ class EOSPageState extends State<EOSPage> {
         ),
       ),
     );
+  }
+
+  writeToExcel(AppStateProvider provider) async {
+    ByteData data = await rootBundle.load("assets/preos.xlsx");
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    excel.updateCell('PVT', CellIndex.indexByString("B4"),
+        provider.currentCompound.tc.toString());
+    excel.updateCell('PVT', CellIndex.indexByString("C4"),
+        provider.currentCompound.pc.toString());
+    excel.updateCell(
+        'PVT', CellIndex.indexByString("B7"), multiplyFieldController.text);
+    excel.updateCell(
+        'PVT', CellIndex.indexByString("B8"), multiplyFieldController2.text);
+    print(multiplyFieldController2.text);
+
+    //print(getApplicationDocumentsDirectory().toString());
+
+    excel.encode().then((onValue) {
+      File("assets/preos.xlsx")
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(onValue);
+    });
+  }
+
+  readFromExcel() async {
+    ByteData data = await rootBundle.load("assets/preos.xlsx");
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    var sheet = excel['PVT'];
+    print("burdayım");
+
+    var denemeokuma = sheet.cell(CellIndex.indexByString("B4"));
+    print(denemeokuma.value.toString());
+    var denemeokuma2 = sheet.cell(CellIndex.indexByString("C10"));
+    multiplyResult = denemeokuma2.value.value;
+    fugasitesonuc = sheet.cell(CellIndex.indexByString("C10"));
+    fugasite = fugasitesonuc.value.value;
+    print("mresult" + multiplyResult);
+    sfaktoru = sheet.cell(CellIndex.indexByString("C10"));
+    print("fugasite " + fugasite);
   }
 }
