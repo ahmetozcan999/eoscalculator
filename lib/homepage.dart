@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               AlertDialog alert = AlertDialog(
                 title: Text('' + _compoundList[index].name.toUpperCase()),
-                content: Text('Formül: ' +
+                content: Text('Formül:' +
                     _compoundList[index].formula +
                     '\nTfp: ' +
                     _compoundList[index].tfp.toString() +
