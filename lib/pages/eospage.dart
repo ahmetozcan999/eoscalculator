@@ -164,28 +164,36 @@ class EOSPageState extends State<EOSPage> {
     print(multiplyFieldController2.text);
 
     //print(getApplicationDocumentsDirectory().toString());
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+
+    new Directory(appDocDirectory.path + '/' + 'dir').create(recursive: true)
+// The created directory is returned as a Future.
+        .then((Directory directory) {
+      print('Path of New Dir: ' + directory.path);
+    });
 
     excel.encode().then((onValue) {
-      File("assets/preos.xlsx")
+      File(appDocDirectory.path + '/' + 'dir/test.xlsx')
         ..createSync(recursive: true)
         ..writeAsBytesSync(onValue);
     });
   }
 
   readFromExcel() async {
-    ByteData data = await rootBundle.load("assets/preos.xlsx");
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    var file = appDocDirectory.path + '/' + 'dir/test.xlsx';
+    var bytes = File(file).readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
 
     var sheet = excel['PVT'];
     print("burdayım");
 
-    var denemeokuma = sheet.cell(CellIndex.indexByString("B4"));
+    var denemeokuma = sheet.cell(CellIndex.indexByString("C4"));
     print(denemeokuma.value.toString());
     var denemeokuma2 = sheet.cell(CellIndex.indexByString("C10"));
-    multiplyResult = denemeokuma2.value.value;
+    multiplyResult = denemeokuma2.value.toString();
     fugasitesonuc = sheet.cell(CellIndex.indexByString("C10"));
-    fugasite = fugasitesonuc.value.value;
+    fugasite = fugasitesonuc.value;
     print("mresult" + multiplyResult);
     sfaktoru = sheet.cell(CellIndex.indexByString("C10"));
     print("fugasite " + fugasite);

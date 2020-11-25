@@ -90,12 +90,7 @@ class _HomePageState extends State<HomePage> {
                     _compoundList[index].dHf.toString() +
                     '\ndGf: ' +
                     _compoundList[index].dGf.toString() +
-                    '\nEq: ' +
-                    _compoundList[index].eq.toString() +
-                    '\nLden: ' +
-                    _compoundList[index].lden.toString() +
-                    '\nTden: ' +
-                    _compoundList[index].tden.toString()),
+                    '\nEq: '),
                 actions: [
                   FlatButton(
                     child: Text("Hesapla"),
@@ -169,11 +164,7 @@ class _HomePageState extends State<HomePage> {
                     '\ndGf: ' +
                     _searchResult[i].dGf.toString() +
                     '\nEq: ' +
-                    _searchResult[i].eq.toString() +
-                    '\nLden: ' +
-                    _searchResult[i].lden.toString() +
-                    '\nTden: ' +
-                    _searchResult[i].tden.toString()),
+                    _searchResult[i].eq.toString()),
                 actions: [],
               );
               showDialog(
