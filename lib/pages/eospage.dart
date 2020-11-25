@@ -2,6 +2,11 @@ import 'package:eoscalculator/providers/AppStateProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
+import 'package:excel/excel.dart';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:excel/excel.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 class EOSPage extends StatefulWidget {
   @override
@@ -29,11 +34,42 @@ class EOSPageState extends State<EOSPage> {
     final multiplyFieldController = TextEditingController();
     final multiplyFieldController2 = TextEditingController();
 
-    count() {
+    count() async {
       setState(() {
         multiplyResult = double.parse(multiplyFieldController.text) *
             provider.currentCompound.pc;
       });
+
+      ByteData data = await rootBundle.load("assets/rt.xlsx");
+      var bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      var excel = Excel.decodeBytes(bytes);
+
+      for (var table in excel.tables.keys) {
+        print(table); //sheet Name
+        print(excel.tables[table].maxCols);
+        print(excel.tables[table].maxRows);
+        for (var row in excel.tables[table].rows) {
+          print("$row");
+        }
+      }
+
+/** buraya sheet name  gelecek */
+/** b4 c4 gibi yerlere de bizim value'lar gelecek. */
+      excel.updateCell("sheet",
+          CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 3), "B4");
+
+      excel.updateCell("sheet",
+          CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 3), "C4");
+
+      excel.updateCell("sheet",
+          CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: 3), "D4");
+
+      excel.updateCell("sheet",
+          CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 6), "B7");
+
+      excel.updateCell("sheet",
+          CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 7), "B8");
     }
 
     return Scaffold(
