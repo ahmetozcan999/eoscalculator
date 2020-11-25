@@ -37,6 +37,7 @@ dependencies:
   gsheets: ^0.2.6
   syncfusion_flutter_xlsio: ^18.3.50-beta
   spreadsheet_decoder: ^1.2.0
+  path_provider: ^1.6.24
 
 dev_dependencies:
   flutter_test:
