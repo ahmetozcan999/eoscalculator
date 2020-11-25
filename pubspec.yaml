@@ -34,6 +34,9 @@ dependencies:
   dio: 1.0.0
   get_it: ^5.0.1
   excel: ^1.1.5
+  gsheets: ^0.2.6
+  syncfusion_flutter_xlsio: ^18.3.50-beta
+  spreadsheet_decoder: ^1.2.0
 
 dev_dependencies:
   flutter_test:
