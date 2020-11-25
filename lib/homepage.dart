@@ -56,17 +56,23 @@ class _HomePageState extends State<HomePage> {
                 title: Text('' + _compoundList[index].name.toUpperCase()),
                 content: Text('Formül:' +
                     _compoundList[index].formula +
+                    '\nMolekül Ağırlığı: ' +
+                    _compoundList[index].molwt.toString() +
                     '\nTfp: ' +
                     _compoundList[index].tfp.toString() +
-                    '\nTb: ' +
+                    '\nKaynama Noktası: ' +
                     _compoundList[index].tb.toString() +
-                    '\nTc: ' +
+                    ' K' +
+                    '\nKritik Sıcaklık: ' +
                     _compoundList[index].tc.toString() +
-                    '\nPc: ' +
+                    ' K' +
+                    '\nKritik Basınç: ' +
                     _compoundList[index].pc.toString() +
-                    '\nVc: ' +
+                    ' Bar'
+                        '\nKritik Hacim: ' +
                     _compoundList[index].vc.toString() +
-                    '\nZc: ' +
+                    ' cm3/mol' +
+                    '\nSıkıştırılabilirlik faktörü: ' +
                     _compoundList[index].zc.toString() +
                     '\nΩ: ' +
                     _compoundList[index].omega.toString() +

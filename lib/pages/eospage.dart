@@ -1,7 +1,7 @@
-// Create a Form widget.
 import 'package:eoscalculator/providers/AppStateProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class EOSPage extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class EOSPageState extends State<EOSPage> {
 
     final provider = Provider.of<AppStateProvider>(context);
     final multiplyFieldController = TextEditingController();
+    final multiplyFieldController2 = TextEditingController();
 
     count() {
       setState(() {
@@ -51,13 +52,12 @@ class EOSPageState extends State<EOSPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                        "Seçilen adı: " + provider.currentCompound?.name ??
-                            "-"),
+                        "Seçilen : " + provider.currentCompound?.name ?? "-"),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("PC değeri: " +
-                        provider.currentCompound?.pc.toString()),
+                    child: Text("Formül : " +
+                        provider.currentCompound?.formula.toString()),
                   ),
                   // TextFormField(
                   //   validator: (value) {
@@ -69,16 +69,51 @@ class EOSPageState extends State<EOSPage> {
                   // ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Kaçla çarpılacak?"),
+                    child: Text("Sıcaklık Değeri"),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      decoration: new InputDecoration(
+                        fillColor: Colors.white,
+                        labelText: "Kelvin cinsinden sıcaklık değeri",
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        //fillColor: Colors.green
+                      ),
                       keyboardType: TextInputType.number,
                       controller: multiplyFieldController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'Değer Giriniz';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Basınç Değeri"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                        labelText: "MPa cinsinden basınç değeri",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                      keyboardType: TextInputType.number,
+                      controller: multiplyFieldController2,
+                      validator: (value2) {
+                        if (value2.isEmpty) {
+                          return 'Değer Giriniz';
                         }
                         return null;
                       },
@@ -99,7 +134,7 @@ class EOSPageState extends State<EOSPage> {
                               SnackBar(content: Text('Hesaplanıyor...')));
                         }
                       },
-                      child: Text('Hesapla'),
+                      child: Text('Calculate'),
                     ),
                   ),
                   multiplyResult != null
