@@ -6,6 +6,7 @@ import 'package:eoscalculator/providers/AppStateProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'models/compound.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,7 +53,43 @@ class _HomePageState extends State<HomePage> {
             title: Text(_compoundList[index].name),
             subtitle: Text(_compoundList[index].formula),
             onTap: () {
-              AlertDialog alert = AlertDialog(
+              Alert(
+                context: context,
+                title: _compoundList[index].name.toUpperCase(),
+                desc: 'Formül:' +
+                    _compoundList[index].formula +
+                    '\nMolekül Ağırlığı: ' +
+                    _compoundList[index].molwt.toString() +
+                    '\nKritik Sıcaklık: ' +
+                    _compoundList[index].tc.toString() +
+                    ' K' +
+                    '\nKritik Basınç: ' +
+                    _compoundList[index].pc.toString() +
+                    ' Bar'
+                        '\nKritik Hacim: ' +
+                    _compoundList[index].vc.toString() +
+                    ' cm3/mol' +
+                    '\nOmega: ' +
+                    _compoundList[index].omega.toString(),
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "HESAPLA",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      provider.changeCurrentCompound(_compoundList[index]);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EOSPage()),
+                      );
+                    },
+                    width: 120,
+                  )
+                ],
+              ).show();
+              /*AlertDialog alert = AlertDialog(
                 title: Text('' + _compoundList[index].name.toUpperCase()),
                 content: Text('Formül:' +
                     _compoundList[index].formula +
@@ -113,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context) {
                   return alert;
                 },
-              );
+              );*/
             },
           ),
         );
@@ -131,6 +168,12 @@ class _HomePageState extends State<HomePage> {
             title: Text(_searchResult[i].name),
             subtitle: Text(_searchResult[i].formula),
             onTap: () {
+              Alert(
+                      context: context,
+                      title: "RFLUTTER",
+                      desc: "Flutter is awesome.")
+                  .show();
+              /*
               AlertDialog alert = AlertDialog(
                 title: Text(_searchResult[i].name.toUpperCase()),
                 content: Text('Formül: ' +
@@ -172,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context) {
                   return alert;
                 },
-              );
+              );*/
             },
           ),
         );

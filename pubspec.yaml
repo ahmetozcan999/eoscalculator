@@ -38,6 +38,8 @@ dependencies:
   syncfusion_flutter_xlsio: ^18.3.50-beta
   spreadsheet_decoder: ^1.2.0
   path_provider: ^1.6.24
+  rflutter_alert:
+   git: git://github.com/RatelHub/rflutter_alert.git
 
 dev_dependencies:
   flutter_test:

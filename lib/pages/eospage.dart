@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle, ByteData2;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
@@ -36,6 +37,7 @@ class EOSPageState extends State<EOSPage> {
   var fugasitesonuc;
   final multiplyFieldController = TextEditingController();
   final multiplyFieldController2 = TextEditingController();
+  var denemetoplama = 2;
 
   var sfaktoru;
 
@@ -45,11 +47,7 @@ class EOSPageState extends State<EOSPage> {
 
     final provider = Provider.of<AppStateProvider>(context);
 
-    count() async {
-      await writeToExcel(provider);
-
-      await readFromExcel();
-    }
+    count() async {}
 
     return Scaffold(
       appBar: AppBar(
@@ -81,6 +79,8 @@ class EOSPageState extends State<EOSPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.numberWithOptions(
+                          decimal: true, signed: false),
                       decoration: new InputDecoration(
                         fillColor: Colors.white,
                         labelText: "Kelvin cinsinden sıcaklık değeri",
@@ -106,6 +106,8 @@ class EOSPageState extends State<EOSPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.numberWithOptions(
+                          decimal: true, signed: false),
                       decoration: new InputDecoration(
                         labelText: "MPa cinsinden basınç değeri",
                         fillColor: Colors.white,
@@ -130,10 +132,152 @@ class EOSPageState extends State<EOSPage> {
                       onPressed: () {
                         // Validate returns true if the form is valid, or false
                         // otherwise.
+                        print("sqrt sonucu" + sqrt(4).toString());
+                        print("pow sonucu " + pow(2, 2).toString());
+                        print("epow sonucu " + pow(e, 7).toString());
+                        print("ln hesap sonucu " + log(9).toString());
+                        print("toplama denemee sonucu " +
+                            (denemetoplama * 2).toString());
+                        num b7 = double.parse(multiplyFieldController.text);
+                        print("b7 değeri " + b7.toString());
+                        num b8 = double.parse(multiplyFieldController2.text);
+                        print("b8 değeri " + b8.toString());
+                        num c4 = double.parse(provider.currentCompound.pc) / 10;
+                        print("c4 değeri " + c4.toString());
+                        num d4 = double.parse(provider.currentCompound.omega);
+                        print("d4 değeri " + d4.toString());
+
+                        num b4 = double.parse(provider.currentCompound.tc);
+                        print("b4 değeri " + b4.toString());
+
+                        num h7 = b7 / b4;
+                        print("h7 değeri " + h7.toString());
+                        num h8 = b8 / c4;
+                        print("h8 değeri " + h8.toString());
+                        num h9 = 0.37464 + 1.54226 * d4 - 0.26992 * pow(d4, 2);
+                        print("h9 değeri " + h9.toString());
+                        num h10 = pow((1 + h9 * (1 - sqrt(h7))), 2);
+                        print("h10 değeri " + h10.toString());
+
+                        num i6 = 8.314;
+                        print("i6 değeri " + i6.toString());
+
+                        num i8 = 0.4572355289 * pow((b4 * i6), 2) * h10 / c4;
+                        print("i8 değeri " + i8.toString());
+                        num i10 = 0.0777960739 * i6 * b4 / c4;
+                        print("i10 değeri " + i10.toString());
+                        num j11 = i8 * b8 / pow((i6 * b7), 2);
+                        print("j11 değeri " + j11.toString());
+                        num j12 = i10 * b8 / i6 / b7;
+                        print("j12 değeri " + j12.toString());
+
+                        num c18 = -(j11 * j12 - pow(j12, 2) - pow(j12, 3));
+                        print("c18 değeri " + c18.toString());
+                        num b18 = j11 - 3 * pow(j12, 2) - 2 * j12;
+                        print("b18 değeri " + b18.toString());
+                        num a18 = -(1 - j12);
+                        print("a18 değeri " + a18.toString());
+
+                        num d18 = (3 * b18 - pow(a18, 2)) / 3;
+                        print("d18 degeri " + d18.toString());
+                        num a26 = 2 * sqrt((-1 * d18) / 3);
+                        print("a26 değeri " + a26.toString());
+                        num e18 =
+                            (2 * pow(a18, 3) - 9 * a18 * b18 + 27 * c18) / 27;
+                        print("e18 değeri " + e18.toString());
+                        num b26 = 3 * e18 / d18 / a26;
+                        print("b26 değeri " + b26.toString());
+                        num c26 = acos(b26);
+                        print("c26 değeri " + c26.toString());
+                        num d26 = c26 / 3;
+                        print("d26 değeri " + d26.toString());
+                        num e26 = a26 * cos(d26);
+                        print("e26 değeri " + e26.toString());
+                        num c9 = e26 - a18 / 3;
+                        print("c9 değeri " + c9.toString());
+                        num e9 = b8 *
+                            pow(
+                                e,
+                                (c9 -
+                                    1 -
+                                    log(c9 - j12) -
+                                    j11 /
+                                        j12 /
+                                        2.8284 *
+                                        log((c9 + 2.4142 * j12) /
+                                            (c9 - 0.4142 * j12))));
+                        print("e9 değeri " + e9.toString());
+
+                        num f26 = a26 * cos(d26 + 4 * pi / 3);
+                        print("f26 değeri " + f26.toString());
+                        num d9 = c9 * i6 * b7 / b8;
+                        print("d9 değeri " + d9.toString());
+                        num c10 = f26 - a18 / 3;
+                        print("c10 değeri " + c10.toString());
+                        num d10 = c10 * i6 * b7 / b8;
+
+                        print("d10 değeri " + d10.toString());
+                        num g26 = a26 * cos(d26 + 2 * pi / 3);
+                        print("g26 değeri " + g26.toString());
+                        num c11 = g26 - a18 / 3;
+                        print("c11 değeri " + c11.toString());
+                        num d11 = c11 * i6 * b7 / b8;
+                        print("d11 değeri " + d11.toString());
+
+                        num h16 = pow(e18, 2) / 4 + pow(d18, 3) / 27;
+                        print("h16 değeri " + h16.toString());
+                        num b22 = pow((-e18 / 2 - sqrt(h16)), 1 / 3);
+                        print("b22 değeri " + b22.toString());
+                        num a22 = pow(((-1 * e18) / 2 + sqrt(h16)), 1 / 3);
+                        print("a22 değeri " + a22.toString());
+                        num c22 = a22 + b22;
+                        print("c22 değeri " + c22.toString());
+                        num c12 = c22 - a18 / 3;
+                        print("c12 değeri " + c12.toString());
+                        num d12 = c12 * i6 * b7 / b8;
+                        print("d12 değeri " + d12.toString());
+                        num e12 = (pow(
+                                e,
+                                (log(c12 -
+                                    1 -
+                                    log(c12 - j12) -
+                                    j11 /
+                                        j12 /
+                                        2.8284 *
+                                        log((c12 + 2.4142 * j12) /
+                                            (c12 - 0.4142 * j12)))))) *
+                            b8;
+                        print("e12 değeri " + e12.toString());
+                        num e11 = b8 *
+                            (pow(
+                                e,
+                                (c11 -
+                                    1 -
+                                    (log(c11 - j12)) -
+                                    j11 /
+                                        j12 /
+                                        2.8284 *
+                                        (log((c11 + 2.4142 * j12) /
+                                            (c11 - 0.4142 * j12))))));
+                        print("e11 değeri " + e11.toString());
+                        num h12 = e9 / e11;
+                        print("h12 değeri " + h12.toString());
+                        print("fugasite : " + e11.toString());
+
                         if (_formKey.currentState.validate()) {
                           // If the form is valid, display a Snackbar.
 
-                          count();
+                          Alert(
+                            context: context,
+                            title: "Sonuç",
+                            desc: "Fugasite : " +
+                                h12.toString() +
+                                "\nA: " +
+                                j11.toString() +
+                                "\nB: " +
+                                j12.toString(),
+                            image: Image.asset("assets/success.png"),
+                          ).show();
                         }
                       },
                       child: Text('Hesapla'),
@@ -146,56 +290,5 @@ class EOSPageState extends State<EOSPage> {
         ),
       ),
     );
-  }
-
-  writeToExcel(AppStateProvider provider) async {
-    ByteData data = await rootBundle.load("assets/preos.xlsx");
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-
-    excel.updateCell('PVT', CellIndex.indexByString("B4"),
-        provider.currentCompound.tc.toString());
-    excel.updateCell('PVT', CellIndex.indexByString("C4"),
-        provider.currentCompound.pc.toString());
-    excel.updateCell(
-        'PVT', CellIndex.indexByString("B7"), multiplyFieldController.text);
-    excel.updateCell(
-        'PVT', CellIndex.indexByString("B8"), multiplyFieldController2.text);
-    print(multiplyFieldController2.text);
-
-    //print(getApplicationDocumentsDirectory().toString());
-    Directory appDocDirectory = await getApplicationDocumentsDirectory();
-
-    new Directory(appDocDirectory.path + '/' + 'dir').create(recursive: true)
-// The created directory is returned as a Future.
-        .then((Directory directory) {
-      print('Path of New Dir: ' + directory.path);
-    });
-
-    excel.encode().then((onValue) {
-      File(appDocDirectory.path + '/' + 'dir/test.xlsx')
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(onValue);
-    });
-  }
-
-  readFromExcel() async {
-    Directory appDocDirectory = await getApplicationDocumentsDirectory();
-    var file = appDocDirectory.path + '/' + 'dir/test.xlsx';
-    var bytes = File(file).readAsBytesSync();
-    var excel = Excel.decodeBytes(bytes);
-
-    var sheet = excel['PVT'];
-    print("burdayım");
-
-    var denemeokuma = sheet.cell(CellIndex.indexByString("C4"));
-    print(denemeokuma.value.toString());
-    var denemeokuma2 = sheet.cell(CellIndex.indexByString("C10"));
-    multiplyResult = denemeokuma2.value.toString();
-    fugasitesonuc = sheet.cell(CellIndex.indexByString("C10"));
-    fugasite = fugasitesonuc.value;
-    print("mresult" + multiplyResult);
-    sfaktoru = sheet.cell(CellIndex.indexByString("C10"));
-    print("fugasite " + fugasite);
   }
 }
