@@ -1,16 +1,10 @@
 # eoscalculator
 
-A new Flutter application.
+This flutter app will calculate P,V,T and thermodynamic properties using the Peng-Robinson Equation. With given compound. compounds are pulling from host. so it can update all time.	
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## CopyRight 2020
 
-A few resources to get you started if this is your first Flutter project:
+Copyright 2020, Ahmet Özcan	
+Konya Teknik Üniversitesi - Kimya Mühendisliği Bölümü
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
