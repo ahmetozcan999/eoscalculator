@@ -271,7 +271,7 @@ class EOSPageState extends State<EOSPage> {
                             context: context,
                             title: "Sonuç",
                             desc: "Fugasite : " +
-                                h12.toString() +
+                                h12.toStringAsFixed(2) +
                                 "\nA: " +
                                 j11.toString() +
                                 "\nB: " +
