@@ -5,6 +5,7 @@ import 'package:eoscalculator/pages/eospage.dart';
 import 'package:eoscalculator/providers/AppStateProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'models/compound.dart';
@@ -36,7 +37,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    //Remove this method to stop OneSignal Debugging
+
     super.initState();
+    getOnesignal();
 
     getUserDetails();
   }
@@ -89,68 +93,6 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ).show();
-              /*AlertDialog alert = AlertDialog(
-                title: Text('' + _compoundList[index].name.toUpperCase()),
-                content: Text('Formül:' +
-                    _compoundList[index].formula +
-                    '\nMolekül Ağırlığı: ' +
-                    _compoundList[index].molwt.toString() +
-                    '\nTfp: ' +
-                    _compoundList[index].tfp.toString() +
-                    '\nKaynama Noktası: ' +
-                    _compoundList[index].tb.toString() +
-                    ' K' +
-                    '\nKritik Sıcaklık: ' +
-                    _compoundList[index].tc.toString() +
-                    ' K' +
-                    '\nKritik Basınç: ' +
-                    _compoundList[index].pc.toString() +
-                    ' Bar'
-                        '\nKritik Hacim: ' +
-                    _compoundList[index].vc.toString() +
-                    ' cm3/mol' +
-                    '\nSıkıştırılabilirlik faktörü: ' +
-                    _compoundList[index].zc.toString() +
-                    '\nΩ: ' +
-                    _compoundList[index].omega.toString() +
-                    '\nDipm: ' +
-                    _compoundList[index].dipm.toString() +
-                    '\nCpA: ' +
-                    _compoundList[index].cpA.toString() +
-                    '\nCpB: ' +
-                    _compoundList[index].cpB.toString() +
-                    '\nCpC: ' +
-                    _compoundList[index].cpC.toString() +
-                    '\nCpD: ' +
-                    _compoundList[index].cpD.toString() +
-                    '\ndHf: ' +
-                    _compoundList[index].dHf.toString() +
-                    '\ndGf: ' +
-                    _compoundList[index].dGf.toString() +
-                    '\nEq: '),
-                actions: [
-                  FlatButton(
-                    child: Text("Hesapla"),
-                    onPressed: () {
-                      //Page Navigator
-                      print("object");
-
-                      provider.changeCurrentCompound(_compoundList[index]);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EOSPage()),
-                      );
-                    },
-                  ),
-                ],
-              );
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alert;
-                },
-              );*/
             },
           ),
         );
@@ -159,6 +101,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchResults() {
+    final provider2 = Provider.of<AppStateProvider>(context);
     return ListView.builder(
       itemCount: _searchResult.length,
       itemBuilder: (context, i) {
@@ -169,53 +112,84 @@ class _HomePageState extends State<HomePage> {
             subtitle: Text(_searchResult[i].formula),
             onTap: () {
               Alert(
-                      context: context,
-                      title: "RFLUTTER",
-                      desc: "Flutter is awesome.")
-                  .show();
-              /*
-              AlertDialog alert = AlertDialog(
-                title: Text(_searchResult[i].name.toUpperCase()),
-                content: Text('Formül: ' +
-                    _searchResult[i].formula +
-                    '\nTfp: ' +
-                    _searchResult[i].tfp.toString() +
-                    '\nTb: ' +
-                    _searchResult[i].tb.toString() +
-                    '\nTc: ' +
-                    _searchResult[i].tc.toString() +
-                    '\nPc: ' +
-                    _searchResult[i].pc.toString() +
-                    '\nVc: ' +
-                    _searchResult[i].vc.toString() +
-                    '\nZc: ' +
-                    _searchResult[i].zc.toString() +
-                    '\nOmega: ' +
-                    _searchResult[i].omega.toString() +
-                    '\nDipm: ' +
-                    _searchResult[i].dipm.toString() +
-                    '\nCpA: ' +
-                    _searchResult[i].cpA.toString() +
-                    '\nCpB: ' +
-                    _searchResult[i].cpB.toString() +
-                    '\nCpC: ' +
-                    _searchResult[i].cpC.toString() +
-                    '\nCpD: ' +
-                    _searchResult[i].cpD.toString() +
-                    '\ndHf: ' +
-                    _searchResult[i].dHf.toString() +
-                    '\ndGf: ' +
-                    _searchResult[i].dGf.toString() +
-                    '\nEq: ' +
-                    _searchResult[i].eq.toString()),
-                actions: [],
-              );
-              showDialog(
                 context: context,
-                builder: (BuildContext context) {
-                  return alert;
-                },
-              );*/
+                title: _searchResult[i].name.toUpperCase(),
+                desc: 'Formül:' +
+                    _searchResult[i].formula +
+                    '\nMolekül Ağırlığı: ' +
+                    _searchResult[i].molwt.toString() +
+                    '\nKritik Sıcaklık: ' +
+                    _searchResult[i].tc.toString() +
+                    ' K' +
+                    '\nKritik Basınç: ' +
+                    _searchResult[i].pc.toString() +
+                    ' Bar'
+                        '\nKritik Hacim: ' +
+                    _searchResult[i].vc.toString() +
+                    ' cm3/mol' +
+                    '\nOmega: ' +
+                    _searchResult[i].omega.toString(),
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "HESAPLA",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      provider2.changeCurrentCompound(_searchResult[i]);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EOSPage()),
+                      );
+                    },
+                    width: 120,
+                  )
+                ],
+              ).show();
+              /*
+                  AlertDialog alert = AlertDialog(
+                    title: Text(_searchResult[i].name.toUpperCase()),
+                    content: Text('Formül: ' +
+                        _searchResult[i].formula +
+                        '\nTfp: ' +
+                        _searchResult[i].tfp.toString() +
+                        '\nTb: ' +
+                        _searchResult[i].tb.toString() +
+                        '\nTc: ' +
+                        _searchResult[i].tc.toString() +
+                        '\nPc: ' +
+                        _searchResult[i].pc.toString() +
+                        '\nVc: ' +
+                        _searchResult[i].vc.toString() +
+                        '\nZc: ' +
+                        _searchResult[i].zc.toString() +
+                        '\nOmega: ' +
+                        _searchResult[i].omega.toString() +
+                        '\nDipm: ' +
+                        _searchResult[i].dipm.toString() +
+                        '\nCpA: ' +
+                        _searchResult[i].cpA.toString() +
+                        '\nCpB: ' +
+                        _searchResult[i].cpB.toString() +
+                        '\nCpC: ' +
+                        _searchResult[i].cpC.toString() +
+                        '\nCpD: ' +
+                        _searchResult[i].cpD.toString() +
+                        '\ndHf: ' +
+                        _searchResult[i].dHf.toString() +
+                        '\ndGf: ' +
+                        _searchResult[i].dGf.toString() +
+                        '\nEq: ' +
+                        _searchResult[i].eq.toString()),
+                    actions: [],
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );*/
             },
           ),
         );
@@ -287,4 +261,19 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {});
   }
+}
+
+Future<void> getOnesignal() async {
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+  OneSignal.shared.init("f390005d-8875-4286-b035-8d096940e039", iOSSettings: {
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: false
+  });
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  await OneSignal.shared
+      .promptUserForPushNotificationPermission(fallbackToSettings: true);
 }

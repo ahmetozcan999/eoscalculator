@@ -1,1 +1,1 @@
-final String url = 'http://dogadancozumler.xyz/test1.json';
+final String url = 'http://dogadancozumler.xyz/datatest.json';

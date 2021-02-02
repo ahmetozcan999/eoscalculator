@@ -138,16 +138,27 @@ class EOSPageState extends State<EOSPage> {
                         print("ln hesap sonucu " + log(9).toString());
                         print("toplama denemee sonucu " +
                             (denemetoplama * 2).toString());
-                        num b7 = double.parse(multiplyFieldController.text);
+
+                        //num b7 = double.tryParse(multiplyFieldController.text)
+                        //.toDouble();
+                        num b7 = double.tryParse(multiplyFieldController.text
+                            .replaceFirst(",", "."));
+
                         print("b7 değeri " + b7.toString());
-                        num b8 = double.parse(multiplyFieldController2.text);
+
+                        num b8 = double.tryParse(multiplyFieldController2.text
+                            .replaceFirst(",", "."));
                         print("b8 değeri " + b8.toString());
-                        num c4 = double.parse(provider.currentCompound.pc) / 10;
+                        num c4 = double.tryParse(provider.currentCompound.pc
+                                .replaceFirst(",", ".")) /
+                            10;
                         print("c4 değeri " + c4.toString());
-                        num d4 = double.parse(provider.currentCompound.omega);
+                        num d4 = double.tryParse(provider.currentCompound.omega
+                            .replaceFirst(",", "."));
                         print("d4 değeri " + d4.toString());
 
-                        num b4 = double.parse(provider.currentCompound.tc);
+                        num b4 = double.tryParse(
+                            provider.currentCompound.tc.replaceFirst(",", "."));
                         print("b4 değeri " + b4.toString());
 
                         num h7 = b7 / b4;
@@ -266,12 +277,16 @@ class EOSPageState extends State<EOSPage> {
 
                         if (_formKey.currentState.validate()) {
                           // If the form is valid, display a Snackbar.
-
+                          if (h12.toString().contains("NaN")) {
+                            fugasitesonuc = "Hesaplanamadı";
+                          } else {
+                            fugasitesonuc = h12.toString();
+                          }
                           Alert(
                             context: context,
                             title: "Sonuç",
                             desc: "Fugasite : " +
-                                h12.toStringAsFixed(2) +
+                                fugasitesonuc +
                                 "\nA: " +
                                 j11.toString() +
                                 "\nB: " +
